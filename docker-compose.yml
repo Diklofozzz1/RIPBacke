@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./container/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=host
+      - POSTGRES_USER=host
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5000:5000'
+  server:
+    build: .
+    ports:
+      - '3070:3070'
+    command: ["npm", "start"]
+    depends_on:
+      - db
+    links:
+      - db
