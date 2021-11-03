@@ -1,4 +1,3 @@
-// import Connect from "./models/db_model.js";
 const {Connect} = require ('./models/db_model.js');
 
 const express = require("express");

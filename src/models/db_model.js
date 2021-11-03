@@ -5,12 +5,12 @@ const {Sequelize, DataTypes} = require('sequelize');
 
 
 const Connect = new Sequelize(
-    'host',
-    'host',
+    'RIPdb',
+    'postgres',
     'gqallxxx79311',
     {
         dialect: 'postgres',
-        host: '172.19.0.2',
+        host: '127.0.0.1',
         port: 5432,
         logging: false
     }

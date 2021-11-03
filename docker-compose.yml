@@ -6,11 +6,11 @@ services:
     volumes:
       - ./container/data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=host
-      - POSTGRES_USER=host
+      - POSTGRES_DB=RIPdb
+      - POSTGRES_USER=postgres
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
-      - '5000:5000'
+      - '5432:5432'
   server:
     build: .
     ports:
