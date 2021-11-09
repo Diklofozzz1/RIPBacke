@@ -26,6 +26,16 @@ services:
       - rabbitmq_service
       - db
 
+  socket:
+    build: .
+    ports:
+      - '7931:7931'
+    command: ["npm", "start2"]
+    depends_on:
+      - db
+    links:
+      - db
+
   consumer:
     build: .
     ports:
