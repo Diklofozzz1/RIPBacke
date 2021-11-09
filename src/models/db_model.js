@@ -10,8 +10,10 @@ const Connect = new Sequelize(
     'gqallxxx79311',
     {
         dialect: 'postgres',
-        host: '172.19.0.2',
-        port: 5432,
+        // host: 'ripbacke-db-1',
+        host: '0.0.0.0',
+        port: 5000,
+        // port: 5432,
         logging: false
     }
 );
@@ -30,5 +32,15 @@ const User = Connect.define(
         }
     }
 );
+
+const Description = Connect.define(
+    'Description',
+    {
+        description:{
+            type: DataTypes.STRING
+        }
+    }
+);
+
 
 module.exports = {Connect}

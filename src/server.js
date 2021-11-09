@@ -20,6 +20,31 @@ server.use(cors());
 
 const app = http.Server(server);
 
+
+const ampq = require('amqplib/callback_api');
+
+function ampqSender(id){
+    ampq.connect('amqp://rabbitmq:5672', (err, connection)=> {
+        if(err){
+            throw err;
+        }
+        connection.createChannel((err, channel)=>{
+            if(err){
+                throw err;
+            }
+            let queueName = "DeleteRequests";
+            let message = id;
+
+            channel.assertQueue(queueName, {
+                durable: false
+            });
+
+            channel.sendToQueue(queueName, Buffer.from(message));
+            console.log(`Message sended. Context: ${message.toString()}`)
+        })
+    })
+}
+
 server.get('/init_db', (req,res)=>{
     Connect.sync().then()
 });
@@ -83,15 +108,20 @@ server.patch('/update_user_data/:id', async (req,res)=>{
 
 server.delete('/delete_user_data/:id', async (req, res)=>{
     try{
-        const data = await Connect.models.User.findOne({
-            where: {
-                id: req.params.id
-            }
-        })
+        // const data = await Connect.models.User.findOne({
+        //     where: {
+        //         id: req.params.id
+        //     }
+        // })
+        //
+        // res.status(200).json(
+        //     await data.destroy()
+        // )
+        ampqSender(req.params.id)
 
-        res.status(200).json(
-            await data.destroy()
-        )
+        res.status(200).json({
+            queue: `send message to delete user by id: ${req.params.id}`
+        })
     }catch (err){
         res.status(500).json(err)
     }

@@ -10,7 +10,9 @@ services:
       - POSTGRES_USER=host
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
-      - '5000:5000'
+      - '5000:5432'
+
+
   server:
     build: .
     ports:
@@ -18,5 +20,30 @@ services:
     command: ["npm", "start"]
     depends_on:
       - db
+      - rabbitmq_service
+      - consumer
     links:
+      - rabbitmq_service
       - db
+
+  consumer:
+    build: .
+    ports:
+      - '3080:3080'
+    command: ["node", "./consumer/consumer.js"]
+    depends_on:
+      - rabbitmq_service
+      - db
+    links:
+      - rabbitmq_service
+      - db
+
+
+  rabbitmq_service:
+    image: "rabbitmq:3-management"
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./container/rmq:/data
