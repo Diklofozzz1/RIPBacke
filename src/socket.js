@@ -12,10 +12,16 @@ const port = 7931;
 io.on("connection", async (socket) => {
     try{
         socket.on("get_all_descriptions", async ()=>{
-            Connect.models.Description.findAll().then(res => {
-                socket.emit("init_page",res);
-                console.log('hello')
-            })
+            // Connect.models.Description.findAll().then(res => {
+            //     socket.emit("init_page",res);
+            //     console.log('hello')
+            // })
+            try{
+                const data = await Connect.models.Description.findAll();
+                socket.emit('get_all_descriptions_answer', data)
+            }catch (err){
+                io.emit("err",err);
+            }
         })
 
         socket.on("patch_description", async (arg)=>{
@@ -30,7 +36,7 @@ io.on("connection", async (socket) => {
                     description: arg.description
                 })
 
-                socket.emit('patch_patch_description_answer', data)
+                socket.emit('patch_description_answer', data)
             }catch (err){
                 io.emit("err",err);
             }

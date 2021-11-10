@@ -2,6 +2,7 @@ version: '3'
 
 services:
   db:
+    container_name: "ripbacke_db_1"
     image: postgres
     volumes:
       - ./container/data:/var/lib/postgresql/data
@@ -10,7 +11,7 @@ services:
       - POSTGRES_USER=host
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
-      - '5000:5432'
+      - '5000:5000'
 
 
   server:
@@ -21,7 +22,6 @@ services:
     depends_on:
       - db
       - rabbitmq_service
-      - consumer
     links:
       - rabbitmq_service
       - db
@@ -30,7 +30,7 @@ services:
     build: .
     ports:
       - '7931:7931'
-    command: ["npm", "start2"]
+    command: ["npm", "run", "socket"]
     depends_on:
       - db
     links:
@@ -43,6 +43,7 @@ services:
     command: ["node", "./consumer/consumer.js"]
     depends_on:
       - rabbitmq_service
+      - server
       - db
     links:
       - rabbitmq_service

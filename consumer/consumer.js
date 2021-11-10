@@ -7,7 +7,7 @@ const Connect = new Sequelize(
     'gqallxxx79311',
     {
         dialect: 'postgres',
-        host: 'ripbacke-db-1',
+        host: 'ripbacke_db_1',
         port: 5432,
         logging: false
     }

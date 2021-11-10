@@ -46,7 +46,8 @@ function ampqSender(id){
 }
 
 server.get('/init_db', (req,res)=>{
-    Connect.sync().then()
+    Connect.sync().then();
+    res.status(200);
 });
 
 server.post('/create_user', async (req,res)=>{
