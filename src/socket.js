@@ -3,9 +3,25 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const {Connect} = require("./models/db_model");
 
+const cors = require("cors")
+
 const app = express();
+app.use(cors());
 const httpServer = createServer(app);
-const io = new Server(httpServer,{});
+const io = new Server(httpServer,{
+    cors:{
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+
+// const io = new Server(httpServer, {
+//     allowRequest: (req, callback) => {
+//         const noOriginHeader = req.headers.origin === undefined;
+//         callback(null, noOriginHeader);
+//     }
+// });
 
 const port = 7931;
 
